@@ -1,10 +1,4 @@
-# Commercify
-
-<p>It's a Full Stack e-Commerce Web App build in MERN Stack including Stripe payment integartion</p>
-
-[Preview](https://amit-general-bucket.s3.ap-south-1.amazonaws.com/videos/commercify.mp4)
-
-Docker Image : [kamit6337/commercify-server](https://hub.docker.com/repository/docker/kamit6337/commercify-server/general)
+# NodeJS - Redis - Docker - Template
 
 ## Table of Contents
 
@@ -16,33 +10,18 @@ Docker Image : [kamit6337/commercify-server](https://hub.docker.com/repository/d
 
 ## Description
 
-This is an e-Commerce website like Amazon, Flipkart etc. where you can get various products of different categories.
-
 ## Features
 
-- using Twilio for sending otp to mobile
-- protect routes and data though express middleware
-- Stripe payment integration to accept card
-- global error handling at one place : globalErrorHandler.js
-- cookie is created using jwt token to maintain user session
-
 ## Tech
+
 <ul>
 <li>Node JS</li>
 <li>Express JS</li>
 <li>JsonWebToken - <i>create token to maintain user logged in</i></li>
 <li>MongoDB - <i>NoSQL database to store user data</i></li>
-<li>Stripe - <i>online payment integration where user can pay using card</i></li>
-<li>Twilio - <i>user logged in through mobile OTP</i></li>
 </ul>
 
 ## Screenshots
-
-Here are the screenshots of my project:
-
-![product 1](https://commercify-vercel.s3.ap-south-1.amazonaws.com/images/commercify1.png)
-![product 2](https://commercify-vercel.s3.ap-south-1.amazonaws.com/images/commercify2.png)
-
 
 ## Running
 
@@ -60,7 +39,7 @@ To run this server locally using Docker Image :
 version: "3"
 services:
   server:
-    image : kamit6337/commercify-client
+    image : <docker-image-name>
     ports:
       - 8000:8000
     env_file:
@@ -83,7 +62,6 @@ services:
 
 ```
 
-
 - open VS Code terminal (Ctrl + ` )
 
 ```
@@ -92,4 +70,3 @@ docker compose up
 
 - both Redis and server started
 - check by go to url: http://localhost:8000, you will get a response means server is working fine
-
