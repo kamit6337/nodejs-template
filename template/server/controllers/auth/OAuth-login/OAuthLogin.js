@@ -44,7 +44,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
       role: createUser.role,
     });
 
-    res.redirect(`${environment.CLIENT_URL}?token=${token}`);
+    res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
     return;
   }
 
@@ -54,7 +54,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
     role: findUser.role,
   });
 
-  res.redirect(`${environment.CLIENT_URL}?token=${token}`);
+  res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
 });
 
 export default OAuthLogin;
