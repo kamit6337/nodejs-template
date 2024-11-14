@@ -6,7 +6,6 @@ import { corsOptions } from "../lib/corsOptions.js";
 import session from "express-session";
 import expressSessionOptions from "../lib/expressSessionOptions.js";
 import helmet from "helmet";
-import xss from "xss-clean";
 import mongoSanitize from "express-mongo-sanitize";
 
 const globalMiddlewares = (app) => {
@@ -32,9 +31,6 @@ const globalMiddlewares = (app) => {
 
   //prevent attack from NoSQL query
   app.use(mongoSanitize());
-
-  // prvent XSS attack
-  app.use(xss());
 
   return app;
 };
