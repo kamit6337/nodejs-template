@@ -3,6 +3,7 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const readline = require("readline");
 
 function createGitignore(destFolder) {
   const gitignorePath = path.join(destFolder, ".gitignore");
@@ -64,13 +65,16 @@ dist
   console.log(".gitignore created successfully in server folder.");
 }
 
-function copyTemplate(destFolder) {
-  const templatePath = path.join(__dirname, "template");
+function copyTemplate(destFolder, apiChoice) {
+  const templatePath = path.join(
+    __dirname,
+    apiChoice === "graphql" ? "template-graphql" : "template-rest-api"
+  );
 
   try {
     // Copy template files into the destination folder's root
     fs.cpSync(templatePath, destFolder, { recursive: true });
-    console.log("Template files copied to root folder successfully.");
+    console.log(`Template files for ${apiChoice} copied successfully.`);
   } catch (err) {
     console.error("Error copying template files:", err.message);
     process.exit(1);
@@ -91,6 +95,20 @@ function installDependencies(destFolder) {
   }
 }
 
+async function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) =>
+    rl.question(query, (ans) => {
+      rl.close();
+      resolve(ans.trim());
+    })
+  );
+}
+
 async function main() {
   const projectName = process.argv[2] || "my-nodejs-server";
   const isCurrentDir = projectName === ".";
@@ -107,8 +125,14 @@ async function main() {
     fs.mkdirSync(projectPath);
   }
 
+  // Ask the user for API type preference
+  const answer = await askQuestion(
+    "Which API style would you like to use? (rest-api or graphql, default is rest-api): "
+  );
+  const apiChoice = answer.toLowerCase() === "graphql" ? "graphql" : "rest-api";
+
   // Copy template files to root project directory
-  copyTemplate(projectPath);
+  copyTemplate(projectPath, apiChoice);
 
   // Go into the server folder, create .gitignore, install dependencies, and come back
   const serverPath = path.join(projectPath, "server");
@@ -118,7 +142,7 @@ async function main() {
   createGitignore(serverPath);
   installDependencies(projectPath);
 
-  console.log("Node JS server created successfully!");
+  console.log(`${apiChoice} Node.js server created successfully!`);
 }
 
 main();
