@@ -1,7 +1,7 @@
-import HandleGlobalError from "../../../../lib/HandleGlobalError.js";
-import catchAsyncError from "../../../../lib/catchAsyncError.js";
-import { encrypt } from "../../../../lib/encryptAndDecrypt.js";
-import getUserByEmail from "../../../../database/User/getUserByEmail.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
+import { encrypt } from "../../../lib/encryptAndDecrypt.js";
+import getUserByEmail from "../../../database/User/getUserByEmail.js";
 
 const login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
