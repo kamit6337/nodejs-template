@@ -7,7 +7,7 @@
     "amit-nodejs-server": "./index.js"
   },
   "files": [
-    "template",
+    "template-rest-api",
     "index.js",
     "package.json",
     "README.md"
@@ -15,7 +15,7 @@
   "keywords": [
     "nodejs",
     "server",
-    "template",
+    "template-rest-api",
     "amit"
   ],
   "author": "Amit Kumar",
