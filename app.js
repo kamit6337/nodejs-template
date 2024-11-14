@@ -1,7 +1,7 @@
 import "./lib/passport.js";
 import express from "express";
-import authRouter from "./routes/authRoutes.js";
-import userRouter from "./routes/userRoutes.js";
+import authRouter from "./server/routes/authRoutes.js";
+import userRouter from "./server/routes/userRoutes.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import globalMiddlewares from "./middlewares/globalMiddlewares.js";
 import protectRoute from "./middlewares/protectRoute.js";

@@ -1,10 +1,9 @@
 import { environment } from "../../../utils/environment.js";
-import HandleGlobalError from "../../../lib/HandleGlobalError.js";
-import catchAsyncError from "../../../lib/catchAsyncError.js";
-import { encrypt } from "../../../lib/encryptAndDecrypt.js";
-import createUserName from "../../../utils/javaScript/createUserName.js";
-import getUserByEmail from "../../../database/User/getUserByEmail.js";
-import postCreateUser from "../../../database/User/postCreateUser.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js
+import catchAsyncError from "../../../lib/catchAsyncError.js
+import { encrypt } from "../../../lib/encryptAndDecrypt.js
+import getUserByEmail from "../../../database/User/getUserByEmail.js
+import postCreateUser from "../../../database/User/postCreateUser.js
 
 // NOTE: LOGIN SUCCESS
 const OAuthLogin = catchAsyncError(async (req, res, next) => {
@@ -24,12 +23,10 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
   if (!findUser) {
     // MARK: IF NOT FIND USER
 
-    const userName = createUserName(name);
     // const photo = await uploadProfileImageToS3(picture);
 
     const obj = {
       name,
-      username: userName,
       email,
       photo,
       OAuthId: id,
@@ -47,7 +44,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
       role: createUser.role,
     });
 
-    res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
+    res.redirect(`${environment.CLIENT_URL}?token=${token}`);
     return;
   }
 
@@ -57,7 +54,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
     role: findUser.role,
   });
 
-  res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
+  res.redirect(`${environment.CLIENT_URL}?token=${token}`);
 });
 
 export default OAuthLogin;

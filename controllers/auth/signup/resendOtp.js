@@ -1,7 +1,7 @@
-import catchAsyncError from "../../../lib/catchAsyncError.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js
 import sendingEmail from "../../../utils/email/email.js";
 import otpTemplate from "../../../utils/email/otpTemplate.js";
-import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js
 import generateOTP from "../../../utils/javaScript/generateOTP.js";
 import { setUserOTPIntoRedis } from "../../../redis/Auth/signUp.js";
 
