@@ -7,9 +7,9 @@ import login from "../controllers/auth/login/login.js";
 import forgotPassword from "../controllers/auth/forgot-password/forgotPassword.js";
 import newPassword from "../controllers/auth/forgot-password/newPassword.js";
 import OAuthLogin from "../controllers/auth/OAuth-login/OAuthLogin.js";
-import logout from "../controllers/auth/general/logout.js";
 import verifySignup from "../controllers/auth/signup/verifySignup.js";
 import resendOtp from "../controllers/auth/signup/resendOtp.js";
+import verifyUserOTP from "../controllers/auth/otp/verifyUserOTP.js";
 
 const router = express.Router();
 
@@ -18,19 +18,17 @@ router.get("/login/check", loginCheck);
 
 // NOTE: FORGOT PASSWORD
 router.post("/forgot", forgotPassword);
+router.post("/verifyOTP", verifyUserOTP);
 router.post("/newPassword", newPassword);
 
 // NOTE: CUSTOM SIGNUP AND LOGIN
-router.post("/signup/verify", verifySignup);
-router.post("/signup/resendOtp", resendOtp);
-router.post("/signup", signup);
+router.post("/resendOtp", resendOtp);
 router.post("/login", login);
+router.post("/signup", signup);
+router.post("/signup/verify", verifySignup);
 
 // NOTE: OAUTH SIGNUP AND LOGIN
 router.get("/login/OAuth", OAuthLogin);
-
-// NOTE: LOGOUT
-router.get("/logout", logout);
 
 // NOTE: GOOGLE OAUTH
 router.get(

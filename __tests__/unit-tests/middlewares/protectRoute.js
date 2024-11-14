@@ -1,11 +1,11 @@
 import getUserById from "../../../database/User/getUserById.js";
 import protectRoute from "../../../middlewares/protectRoute.js";
-import { decrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
-import Req from "../../../utils/Req.js";
+import { decrypt } from "../../../lib/encryptAndDecrypt.js";
+import Req from "../../../lib/Req.js";
 
 jest.mock("../../../database/User/getUserById.js");
-jest.mock("../../../utils/encryption/encryptAndDecrypt.js");
-jest.mock("../../../utils/Req.js");
+jest.mock("../../../lib/encryptAndDecrypt.js");
+jest.mock("../../../lib/Req.js");
 
 let req, res, next;
 

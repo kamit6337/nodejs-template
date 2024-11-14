@@ -2,9 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import passport from "passport";
-import { corsOptions } from "../utils/corsOptions.js";
+import { corsOptions } from "../lib/corsOptions.js";
 import session from "express-session";
-import expressSessionOptions from "../utils/expressSessionOptions.js";
+import expressSessionOptions from "../lib/expressSessionOptions.js";
 import helmet from "helmet";
 import xss from "xss-clean";
 import mongoSanitize from "express-mongo-sanitize";
@@ -14,8 +14,6 @@ const globalMiddlewares = (app) => {
 
   app.use(cors(corsOptions));
 
-  // Serve static files from the public folder
-  //   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static("public"));
 
   app.use(session(expressSessionOptions));

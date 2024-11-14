@@ -1,12 +1,10 @@
 import { environment } from "../../../utils/environment.js";
-import HandleGlobalError from "../../../utils/HandleGlobalError.js";
-import catchAsyncError from "../../../utils/catchAsyncError.js";
-import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
+import { encrypt } from "../../../lib/encryptAndDecrypt.js";
 import createUserName from "../../../utils/javaScript/createUserName.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
 import postCreateUser from "../../../database/User/postCreateUser.js";
-import uploadProfileImageToS3 from "../../../lib/uploadProfileImageToS3.js";
 
 // NOTE: LOGIN SUCCESS
 const OAuthLogin = catchAsyncError(async (req, res, next) => {
@@ -27,7 +25,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
     // MARK: IF NOT FIND USER
 
     const userName = createUserName(name);
-    const photo = await uploadProfileImageToS3(picture);
+    // const photo = await uploadProfileImageToS3(picture);
 
     const obj = {
       name,
@@ -49,9 +47,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
       role: createUser.role,
     });
 
-    res.cookie("_use", token, cookieOptions);
-
-    res.redirect(`${environment.CLIENT_URL}/flow?username=${userName}`);
+    res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
     return;
   }
 
@@ -61,9 +57,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
     role: findUser.role,
   });
 
-  res.cookie("_use", token, cookieOptions);
-
-  res.redirect(environment.CLIENT_URL);
+  res.redirect(`${environment.CLIENT_URL}/oauth?token=${token}`);
 });
 
 export default OAuthLogin;

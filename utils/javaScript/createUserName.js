@@ -1,4 +1,4 @@
-import generate8digitOTP from "./generate8digitOTP.js";
+import generate8digitOTP from "./generateOTP.js";
 
 const createUserName = (name) => {
   if (!name) return;

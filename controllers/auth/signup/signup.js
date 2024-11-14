@@ -1,11 +1,13 @@
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
-import HandleGlobalError from "../../../utils/HandleGlobalError.js";
-import catchAsyncError from "../../../utils/catchAsyncError.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
 import sendingEmail from "../../../utils/email/email.js";
 import otpTemplate from "../../../utils/email/otpTemplate.js";
-import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
-import generate8digitOTP from "../../../utils/javaScript/generate8digitOTP.js";
+import generateOTP from "../../../utils/javaScript/generateOTP.js";
+import {
+  setUserOTPIntoRedis,
+  setUserSignupDataIntoRedis,
+} from "../../../redis/Auth/signUp.js";
 
 const signup = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -25,19 +27,18 @@ const signup = catchAsyncError(async (req, res, next) => {
     );
   }
 
-  const otp = generate8digitOTP();
-
+  const otp = generateOTP();
   const html = otpTemplate(otp);
   await sendingEmail(email, "OTP for verification", html);
 
-  const token = encrypt({
-    otp,
+  await setUserOTPIntoRedis(email, otp);
+
+  const obj = {
     name,
     email,
     password,
-  });
-
-  res.cookie("_sig", token, cookieOptions);
+  };
+  await setUserSignupDataIntoRedis(obj);
 
   res.json({
     message: "Successfull Send OTP to Email",

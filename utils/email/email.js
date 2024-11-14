@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendingEmail = async (to, subject, html) => {
-  const mailOptions = {
-    from: `SendIt <${EMAIL_USER}>`,
-    to,
-    subject,
-    html,
-  };
-
   try {
+    const mailOptions = {
+      from: `Project-Name <${EMAIL_USER}>`,
+      to,
+      subject,
+      html,
+    };
+
     await transporter.sendMail(mailOptions);
   } catch (error) {
     throw new Error(

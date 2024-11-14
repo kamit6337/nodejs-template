@@ -1,7 +1,7 @@
 import User from "../../models/UserModel.js";
-import catchAsyncDBError from "../../utils/catchAsyncDBError.js";
+import { setUserIntoRedis } from "../../redis/User/user.js";
 
-const patchUserProfile = catchAsyncDBError(async (userId, obj) => {
+const patchUserProfile = async (userId, obj) => {
   const user = await User.findOneAndUpdate(
     {
       _id: userId,
@@ -15,7 +15,9 @@ const patchUserProfile = catchAsyncDBError(async (userId, obj) => {
     }
   );
 
+  await setUserIntoRedis(user);
+
   return user;
-});
+};
 
 export default patchUserProfile;

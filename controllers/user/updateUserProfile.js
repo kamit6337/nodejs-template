@@ -1,11 +1,11 @@
 import patchUserProfile from "../../database/User/patchUserProfile.js";
-import catchAsyncError from "../../utils/catchAsyncError.js";
-import HandleGlobalError from "../../utils/HandleGlobalError.js";
+import catchAsyncError from "../../lib/catchAsyncError.js";
+import HandleGlobalError from "../../lib/HandleGlobalError.js";
 
 const updateUserProfile = catchAsyncError(async (req, res, next) => {
   const userId = req.userId;
 
-  const { name, bio, photo, bg_photo, location, website } = req.body;
+  const { name, photo } = req.body;
 
   if (!name || !photo) {
     return next(new HandleGlobalError("All fields is required", 404));
@@ -15,11 +15,6 @@ const updateUserProfile = catchAsyncError(async (req, res, next) => {
     name,
     photo,
   };
-
-  if (bio) obj.bio = bio;
-  if (bg_photo) obj.bg_photo = bg_photo;
-  if (location) obj.location = location;
-  if (website) obj.website = website;
 
   const user = await patchUserProfile(userId, obj);
 

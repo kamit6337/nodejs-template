@@ -1,43 +1,25 @@
-import catchAsyncError from "../../../utils/catchAsyncError.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
 import sendingEmail from "../../../utils/email/email.js";
 import otpTemplate from "../../../utils/email/otpTemplate.js";
-import {
-  decrypt,
-  encrypt,
-} from "../../../utils/encryption/encryptAndDecrypt.js";
-import HandleGlobalError from "../../../utils/HandleGlobalError.js";
-import generate8digitOTP from "../../../utils/javaScript/generate8digitOTP.js";
-import Req from "../../../utils/Req.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import generateOTP from "../../../utils/javaScript/generateOTP.js";
+import { setUserOTPIntoRedis } from "../../../redis/Auth/signUp.js";
 
 const resendOtp = catchAsyncError(async (req, res, next) => {
-  const { _sig } = Req(req);
+  const { email } = req.body;
 
-  if (!_sig) {
-    return next(
-      new HandleGlobalError(
-        "Something went wrong on resending OTP. Please try later"
-      )
-    );
+  if (!email) {
+    return next(new HandleGlobalError("Email is not provided"));
   }
 
-  const { name, email, password } = decrypt(_sig);
-
-  const newOtp = generate8digitOTP();
+  const newOtp = generateOTP();
 
   const html = otpTemplate(newOtp);
   await sendingEmail(email, "OTP for verification", html);
 
-  const token = encrypt({
-    otp: newOtp,
-    name,
-    email,
-    password,
-  });
+  await setUserOTPIntoRedis(email, newOtp);
 
-  res.cookie("_sig", token, cookieOptions);
-
-  res.status(200).json({
+  resjson({
     message: "Successfull Re-Send OTP to Email",
   });
 });

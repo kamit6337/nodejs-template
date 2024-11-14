@@ -1,12 +1,14 @@
 import User from "../../models/UserModel.js";
-import catchAsyncDBError from "../../utils/catchAsyncDBError.js";
+import { setUserIntoRedis } from "../../redis/User/user.js";
 
-const postCreateUser = catchAsyncDBError(async (obj) => {
+const postCreateUser = async (obj) => {
   const createUser = await User.create({
     ...obj,
   });
 
+  await setUserIntoRedis(createUser);
+
   return createUser;
-});
+};
 
 export default postCreateUser;

@@ -1,7 +1,6 @@
-import HandleGlobalError from "../../../utils/HandleGlobalError.js";
-import catchAsyncError from "../../../utils/catchAsyncError.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
-import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
+import { encrypt } from "../../../lib/encryptAndDecrypt.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
 
 const login = catchAsyncError(async (req, res, next) => {
@@ -39,11 +38,7 @@ const login = catchAsyncError(async (req, res, next) => {
     role: findUser.role,
   });
 
-  res.cookie("_use", token, cookieOptions);
-
-  res.status(200).json({
-    message: "Login Successfully",
-  });
+  res.json(token);
 });
 
 export default login;
