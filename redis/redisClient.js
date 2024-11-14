@@ -1,5 +1,5 @@
 import { Redis } from "ioredis";
-import { environment } from "../../utils/environment.js";
+import { environment } from "../utils/environment.js";
 
 const redisClient = new Redis(
   environment.REDIS_URL || {
@@ -18,8 +18,8 @@ redisClient.on("ready", () => {
   console.log("Redis client ready");
 });
 
-// redisClient.on("error", (err) => {
-//   console.error("Redis error:", err);
-// });
+redisClient.on("error", (err) => {
+  console.error("Redis error:", err);
+});
 
 export default redisClient;

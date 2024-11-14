@@ -3,7 +3,7 @@ import catchAsyncError from "../../../../lib/catchAsyncError.js";
 import { encrypt } from "../../../../lib/encryptAndDecrypt.js";
 import HandleGlobalError from "../../../../lib/HandleGlobalError.js";
 import verifyUserOtp from "../../../../lib/verifyUserOtp.js";
-import { getUserSignUpDataRedis } from "../../../redis/Auth/signUp.js";
+import { getUserSignUpDataRedis } from "../../../../redis/Auth/signUp.js";
 
 const verifySignup = catchAsyncError(async (req, res, next) => {
   const { email, otp } = req.body;
