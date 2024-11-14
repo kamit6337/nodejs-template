@@ -1,0 +1,23 @@
+{
+  "name": "amit-nodejs-server",
+  "version": "1.2.0",
+  "description": "A CLI tool to generate a custom Expo app.",
+  "main": "index.js",
+  "bin": {
+    "amit-nodejs-server": "./index.js"
+  },
+  "files": [
+    "template",
+    "index.js",
+    "package.json",
+    "README.md"
+  ],
+  "keywords": [
+    "nodejs",
+    "server",
+    "template",
+    "amit"
+  ],
+  "author": "Amit Kumar",
+  "license": "MIT"
+}
