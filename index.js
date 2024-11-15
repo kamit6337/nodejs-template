@@ -65,11 +65,18 @@ dist
   console.log(".gitignore created successfully in server folder.");
 }
 
-function copyTemplate(destFolder, apiChoice) {
-  const templatePath = path.join(
-    __dirname,
-    apiChoice === "graphql" ? "template-graphql" : "template-rest-api"
-  );
+function copyTemplate(destFolder, apiChoice, isIncludeSocketIo) {
+  let filePath = "";
+
+  if (apiChoice === "graphql") {
+    filePath = "template-graphql";
+  } else if (isIncludeSocketIo) {
+    filePath = "template-rest-api-socketio";
+  } else {
+    filePath = "template-rest-api";
+  }
+
+  const templatePath = path.join(__dirname, filePath);
 
   try {
     // Copy template files into the destination folder's root
@@ -131,8 +138,22 @@ async function main() {
   );
   const apiChoice = answer.toLowerCase() === "graphql" ? "graphql" : "rest-api";
 
+  let isIncludeSocketIo = false;
+
+  if (apiChoice === "rest-api") {
+    const answer = await askQuestion(
+      "Want to include socket.io? (yes or no, default is no): "
+    );
+
+    if (answer.toLowerCase() === "y" || answer.toLowerCase() === "yes") {
+      isIncludeSocketIo = true;
+    } else {
+      isIncludeSocketIo = false;
+    }
+  }
+
   // Copy template files to root project directory
-  copyTemplate(projectPath, apiChoice);
+  copyTemplate(projectPath, apiChoice, isIncludeSocketIo);
 
   // Go into the server folder, create .gitignore, install dependencies, and come back
   const serverPath = path.join(projectPath, "server");

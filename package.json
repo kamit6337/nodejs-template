@@ -9,6 +9,7 @@
   "files": [
     "template-rest-api",
     "template-graphql",
+    "template-rest-api-socketio",
     "index.js",
     "package.json",
     "README.md"
@@ -18,6 +19,7 @@
     "server",
     "template-rest-api",
     "template-graphql",
+    "template-rest-api-socketio",
     "amit"
   ],
   "author": "Amit Kumar",
