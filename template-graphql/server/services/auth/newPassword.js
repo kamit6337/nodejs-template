@@ -12,6 +12,10 @@ const newPassword = catchGraphQLError(async (parent, args, contextValue) => {
 
   const findUser = await getUserByEmail(email);
 
+  if (!findUser) {
+    throw new Error("You are not our user. Please signup first");
+  }
+
   const hashPassword = bcrypt.hashSync(password, 12);
 
   const obj = {
@@ -19,7 +23,7 @@ const newPassword = catchGraphQLError(async (parent, args, contextValue) => {
     updatedAt: Date.now(),
   };
 
-  await patchUserProfile(findUser._id, obj);
+  await patchUserProfile(findUser._id.toString(), obj);
 
   return "Password has been updated";
 });

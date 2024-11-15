@@ -1,4 +1,0 @@
-type Image {
-  ratio: Float!
-  path: String!
-}

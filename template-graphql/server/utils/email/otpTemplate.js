@@ -12,6 +12,7 @@ const otpTemplate = (otp) => `
             <td style="padding: 20px; color: #333333; font-size: 16px;">
               <p>Please use the following OTP to complete your verification:</p>
               <h2 style="color: #4CAF50; font-size: 32px;">${otp}</h2>
+              <p>This OTP is valid only for 10 minutes</p>
               <p>If you did not request this, please ignore this email.</p>
               <p>Thank you!</p>
             </td>

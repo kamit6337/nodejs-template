@@ -1,20 +1,16 @@
 import "./lib/passport.js";
+import express from "express";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import authRouter from "./routes/authRoutes.js";
 import globalMiddlewares from "./middlewares/globalMiddlwares.js";
-import socketConnect from "./lib/socketConnect.js";
-import socketAuthMiddleware from "./middlewares/socketAuthMiddleware.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import typeDefs from "./graphql/typeDefs.js";
 import resolvers from "./graphql/resolvers.js";
 import cors from "cors";
-import newConnection from "./socket/newConnection.js";
-import joinRooms from "./socket/joinRooms.js";
-import onDisconnect from "./socket/onDisconnect.js";
-import unIdentifiedUrlError from "./controllers/error/unIdentifiedUrlError.js";
+import unIdentifiedUrlError from "./middlewares/unIdentifiedUrlError.js";
 
-const { app, httpServer, io } = socketConnect();
+const app = express();
 
 const init = async () => {
   try {
@@ -24,15 +20,6 @@ const init = async () => {
 
     app.get("/health", (req, res) => {
       res.send("Server health is fine and good");
-    });
-
-    // NOTE: SOCKET CONNECTION
-    io.use(socketAuthMiddleware);
-    io.on("connection", (socket) => {
-      console.log(`User connected: ${socket.id}`);
-      newConnection(socket);
-      joinRooms(socket);
-      onDisconnect(socket);
     });
 
     // MARK: GLOBAL MIDDLEWARES
@@ -70,6 +57,4 @@ const init = async () => {
 
 init();
 
-export { app };
-
-export default httpServer;
+export default app;

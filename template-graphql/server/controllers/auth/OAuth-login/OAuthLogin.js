@@ -1,10 +1,10 @@
 import { environment } from "../../../utils/environment.js";
 import HandleGlobalError from "../../../lib/HandleGlobalError.js";
 import catchAsyncError from "../../../lib/catchAsyncError.js";
-import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
+import { encrypt } from "../../../lib/encryptAndDecrypt.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
 import postCreateUser from "../../../database/User/postCreateUser.js";
-import uploadProfileImageToS3 from "../../../lib/aws/uploadProfileImageToS3.js";
+// import uploadProfileImageToS3 from "../../../lib/aws/uploadProfileImageToS3.js";
 
 // NOTE: LOGIN SUCCESS
 const OAuthLogin = catchAsyncError(async (req, res, next) => {
@@ -13,7 +13,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
       new HandleGlobalError("Error in login. Please try again!", 403)
     );
 
-  const {
+  let {
     id,
     provider,
     _json: { name, email, picture },
@@ -24,12 +24,12 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
   if (!findUser) {
     // MARK: IF NOT FIND USER
 
-    const photo = await uploadProfileImageToS3(picture);
+    // picture = await uploadProfileImageToS3(picture);
 
     const obj = {
       name,
       email,
-      photo,
+      photo: picture,
       OAuthId: id,
       OAuthProvider: provider,
     };

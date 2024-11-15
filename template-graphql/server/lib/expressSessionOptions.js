@@ -2,7 +2,7 @@ import MongoStore from "connect-mongo";
 import { environment } from "../utils/environment.js";
 
 const expressSessionOptions = {
-  cookie: { httpOnly: true, maxAge: environment.JWT_EXPIRES_IN },
+  cookie: { httpOnly: true, maxAge: environment.EXPIRES_IN },
   secret: environment.JWT_SECRET_KEY,
   resave: false,
   saveUninitialized: false,

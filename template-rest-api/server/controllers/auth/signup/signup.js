@@ -38,7 +38,7 @@ const signup = catchAsyncError(async (req, res, next) => {
     email,
     password,
   };
-  await setUserSignupDataIntoRedis(obj);
+  await setUserSignupDataIntoRedis(email, obj);
 
   res.json({
     message: "Successfull Send OTP to Email",

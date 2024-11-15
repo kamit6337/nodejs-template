@@ -1,29 +1,30 @@
-import { GraphQLError } from "graphql";
 import catchGraphQLError from "../../lib/catchGraphQLError.js";
 import getUserByEmail from "../../database/User/getUserByEmail.js";
-import generate8digitOTP from "../../utils/javaScript/generate8digitOTP.js";
 import otpTemplate from "../../utils/email/otpTemplate.js";
-import { setNewUserToRedis } from "../../redis/Auth/auth.js";
-import { setUserOtpFromRedis } from "../../redis/Auth/otp.js";
 import sendingEmail from "../../utils/email/email.js";
+import generateOTP from "../../utils/javaScript/generateOTP.js";
+import {
+  setUserOTPIntoRedis,
+  setUserSignupDataIntoRedis,
+} from "../../redis/Auth/signUp.js";
 
 const makeUserSignUp = catchGraphQLError(async (parent, args, contextValue) => {
   const { name, email, password } = args;
 
   if (!name || !email || !password) {
-    throw new GraphQLError("Not provided all field", 404);
+    throw new Error("Not provided all field", 404);
   }
 
   // MARK: CHECK USER IS ALREADY PRESENT OR NOT
   const findUser = await getUserByEmail(email);
 
   if (findUser) {
-    throw new GraphQLError(
+    throw new Error(
       "You have already signed up with this Email ID. Please login or signup with different Email ID"
     );
   }
 
-  const otp = generate8digitOTP();
+  const otp = generateOTP();
 
   const html = otpTemplate(otp);
 
@@ -32,11 +33,10 @@ const makeUserSignUp = catchGraphQLError(async (parent, args, contextValue) => {
     email,
     password,
   };
-
-  await setNewUserToRedis(email, obj);
-  await setUserOtpFromRedis(email, otp);
-
   await sendingEmail(email, "OTP for verification", html);
+
+  await setUserOTPIntoRedis(email, otp);
+  await setUserSignupDataIntoRedis(email, obj);
 
   return "Successfull Send OTP to Email";
 });

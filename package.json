@@ -8,6 +8,7 @@
   },
   "files": [
     "template-rest-api",
+    "template-graphql",
     "index.js",
     "package.json",
     "README.md"
@@ -16,6 +17,7 @@
     "nodejs",
     "server",
     "template-rest-api",
+    "template-graphql",
     "amit"
   ],
   "author": "Amit Kumar",

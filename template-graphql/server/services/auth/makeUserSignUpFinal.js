@@ -1,8 +1,8 @@
 import postCreateUser from "../../database/User/postCreateUser.js";
-import verifyOtp from "../../functions/verifyOtp.js";
+import verifyOtp from "../../lib/verifyOtp.js";
 import catchGraphQLError from "../../lib/catchGraphQLError.js";
-import { getNewUserByRedis } from "../../redis/Auth/auth.js";
-import { encrypt } from "../../utils/encryption/encryptAndDecrypt.js";
+import { encrypt } from "../../lib/encryptAndDecrypt.js";
+import { getUserSignUpDataRedis } from "../../redis/Auth/signUp.js";
 
 const makeUserSignUpFinal = catchGraphQLError(
   async (parent, args, contextValue) => {
@@ -10,7 +10,7 @@ const makeUserSignUpFinal = catchGraphQLError(
 
     await verifyOtp(email, otp);
 
-    const user = await getNewUserByRedis(email);
+    const user = await getUserSignUpDataRedis(email);
 
     if (!user) {
       throw new Error("Something went wrong in signup. Please try later");
@@ -33,14 +33,10 @@ const makeUserSignUpFinal = catchGraphQLError(
       throw new Error("Issue in Signup. Please try later", 404);
     }
 
-    console.log("createUser", createUser);
-
     const token = encrypt({
       id: createUser._id.toString(),
       role: createUser.role,
     });
-
-    console.log("token", token);
 
     return token;
   }

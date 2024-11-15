@@ -1,4 +1,4 @@
-import verifyOtp from "../../functions/verifyOtp.js";
+import verifyOtp from "../../lib/verifyOtp.js";
 import catchGraphQLError from "../../lib/catchGraphQLError.js";
 
 const otpVerification = catchGraphQLError(
