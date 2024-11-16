@@ -1,6 +1,6 @@
-import catchAsyncError from "../../lib/catchAsyncError.js";
-import HandleGlobalError from "../../lib/HandleGlobalError.js";
-import verifyUserOtp from "../../lib/verifyUserOtp.js";
+import catchAsyncError from "../../../lib/catchAsyncError.js";
+import HandleGlobalError from "../../../lib/HandleGlobalError.js";
+import verifyUserOtp from "../../../lib/verifyUserOtp.js";
 
 const verifyUserOTP = catchAsyncError(async (req, res, next) => {
   const { email, otp } = req.body;
