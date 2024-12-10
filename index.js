@@ -19,11 +19,11 @@ function copyTemplate(destFolder, apiChoice, isIncludeSocketIo) {
   let filePath = "";
 
   if (apiChoice === "graphql") {
-    filePath = "template-graphql";
+    filePath = "graphql";
   } else if (isIncludeSocketIo) {
-    filePath = "template-rest-api-socketio";
+    filePath = "rest-api-socketio";
   } else {
-    filePath = "template-rest-api";
+    filePath = "rest-api";
   }
 
   const templatePath = path.join(__dirname, filePath);
@@ -39,13 +39,12 @@ function copyTemplate(destFolder, apiChoice, isIncludeSocketIo) {
 }
 
 function installDependencies(destFolder) {
-  const serverPath = path.join(destFolder, "server");
-  console.log("Installing dependencies in server folder...");
+  console.log("Installing dependencies...");
 
   try {
     // Change directory to server and run npm install
-    execSync("npm install", { cwd: serverPath, stdio: "inherit" });
-    console.log("Dependencies installed successfully in server folder.");
+    execSync("npm install", { cwd: destFolder, stdio: "inherit" });
+    console.log("Dependencies installed successfully");
   } catch (err) {
     console.error("Error installing dependencies:", err.message);
     process.exit(1);
@@ -105,11 +104,6 @@ async function main() {
   // Copy template files to root project directory
   copyTemplate(projectPath, apiChoice, isIncludeSocketIo);
 
-  // Go into the server folder, create .gitignore, install dependencies, and come back
-  const serverPath = path.join(projectPath, "server");
-  if (!fs.existsSync(serverPath)) {
-    fs.mkdirSync(serverPath);
-  }
   createGitignore(serverPath);
   installDependencies(projectPath);
 

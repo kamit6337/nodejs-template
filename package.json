@@ -7,9 +7,9 @@
     "amit-nodejs-server": "./index.js"
   },
   "files": [
-    "template-rest-api",
-    "template-graphql",
-    "template-rest-api-socketio",
+    "rest-api",
+    "graphql",
+    "rest-api-socketio",
     "index.js",
     "gitignore.js",
     "package.json",
@@ -17,11 +17,7 @@
   ],
   "keywords": [
     "nodejs",
-    "server",
-    "template-rest-api",
-    "template-graphql",
-    "template-rest-api-socketio",
-    "amit"
+    "server"
   ],
   "author": "Amit Kumar",
   "license": "MIT"
