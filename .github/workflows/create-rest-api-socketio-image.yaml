@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build -t kamit6337/template-rest-api-socketio-server ./template-rest-api-socketio/server
+        run: docker build -t kamit6337/template-rest-api-socketio-server ./rest-api-socketio
 
       - name: Push the Docker image to Docker Hub
         run: docker push kamit6337/template-rest-api-socketio-server
