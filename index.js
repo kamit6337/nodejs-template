@@ -15,18 +15,8 @@ function createGitignore(destFolder) {
   console.log(".gitignore created successfully in server folder.");
 }
 
-function copyTemplate(destFolder, apiChoice, isIncludeSocketIo) {
-  let filePath = "";
-
-  if (apiChoice === "graphql") {
-    filePath = "graphql";
-  } else if (isIncludeSocketIo) {
-    filePath = "rest-api-socketio";
-  } else {
-    filePath = "rest-api";
-  }
-
-  const templatePath = path.join(__dirname, filePath);
+function copyTemplate(destFolder, templateName) {
+  const templatePath = path.join(__dirname, templateName);
 
   try {
     // Copy template files into the destination folder's root
@@ -81,28 +71,56 @@ async function main() {
     fs.mkdirSync(projectPath);
   }
 
+  // NOTE: QUESTION 1
+
+  let templateName = "rest-api";
+
   // Ask the user for API type preference
-  const answer = await askQuestion(
-    "Which API style would you like to use? (rest-api or graphql, default is rest-api): "
+  const answer1 = await askQuestion(
+    "Which API style would you like to use? (REST-APIs or graphql, default is REST-APIs): "
   );
-  const apiChoice = answer.toLowerCase() === "graphql" ? "graphql" : "rest-api";
 
-  let isIncludeSocketIo = false;
-
-  if (apiChoice === "rest-api") {
-    const answer = await askQuestion(
+  if (answer1?.toLowerCase().trim() === "graphql") {
+    templateName = "graphql";
+  } else {
+    const answer2 = await askQuestion(
       "Want to include socket.io? (yes or no, default is no): "
     );
 
-    if (answer.toLowerCase() === "y" || answer.toLowerCase() === "yes") {
-      isIncludeSocketIo = true;
+    if (
+      answer2?.toLowerCase().trim() === "y" ||
+      answer2?.toLowerCase().trim() === "yes"
+    ) {
+      const answer3 = await askQuestion(
+        "Want to include supabase(SQL) ? (yes or no, default is MongoDB (NO-SQL)): "
+      );
+
+      if (
+        answer3?.toLowerCase().trim() === "y" ||
+        answer3?.toLowerCase().trim() === "yes"
+      ) {
+        templateName = "rest-api-socketio-supabase";
+      } else {
+        templateName = "rest-api-socketio";
+      }
     } else {
-      isIncludeSocketIo = false;
+      const answer4 = await askQuestion(
+        "Want to include supabase(SQL) ? (yes or no, default is MongoDB (NO-SQL)): "
+      );
+
+      if (
+        answer4?.toLowerCase().trim() === "y" ||
+        answer4?.toLowerCase().trim() === "yes"
+      ) {
+        templateName = "rest-api-supabase";
+      } else {
+        templateName = "rest-api";
+      }
     }
   }
 
   // Copy template files to root project directory
-  copyTemplate(projectPath, apiChoice, isIncludeSocketIo);
+  copyTemplate(projectPath, templateName);
 
   createGitignore(serverPath);
   installDependencies(projectPath);
