@@ -1,4 +1,4 @@
-name: RESR-APIs Socket-IO Template Image
+name: REST-APIs Socket-IO Template Image
 
 on:
   push:
