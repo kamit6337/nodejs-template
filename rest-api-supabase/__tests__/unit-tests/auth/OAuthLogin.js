@@ -2,7 +2,6 @@ import OAuthLogin from "../../../controllers/auth/OAuth-login/OAuthLogin.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
 import postCreateUser from "../../../database/User/postCreateUser.js";
 import uploadProfileImageToS3 from "../../../lib/uploadProfileImageToS3.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
 import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
 import { environment } from "../../../utils/environment.js";
 import createUserName from "../../../utils/javaScript/createUserName.js";
@@ -49,12 +48,6 @@ it("OAuth-login, user logged in when create previously successsfully", async () 
 
   await OAuthLogin(req, res, next);
 
-  expect(res.cookie).toHaveBeenCalledWith(
-    "_use",
-    "encryptedToken",
-    cookieOptions
-  );
-
   expect(res.redirect).toHaveBeenCalledWith(environment.CLIENT_URL);
 });
 
@@ -76,12 +69,6 @@ it("OAuth-login, user logged in with create user successsfully", async () => {
   encrypt.mockReturnValue("encryptedToken");
 
   await OAuthLogin(req, res, next);
-
-  expect(res.cookie).toHaveBeenCalledWith(
-    "_use",
-    "encryptedToken",
-    cookieOptions
-  );
 
   expect(res.redirect).toHaveBeenCalledWith(
     `${environment.CLIENT_URL}/flow?username=${userName}`

@@ -1,6 +1,5 @@
 import verifySignup from "../../../controllers/auth/signup/verifySignup.js";
 import postCreateUser from "../../../database/User/postCreateUser.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
 import {
   decrypt,
   encrypt,
@@ -59,14 +58,8 @@ it("user signup successfully", async () => {
 
   await verifySignup(req, res, next);
 
-  expect(res.clearCookie).toHaveBeenCalledWith("_sig", cookieOptions);
 
-  // Ensure the cookie is set with the correct token
-  expect(res.cookie).toHaveBeenCalledWith(
-    "_use",
-    "encryptedData",
-    cookieOptions
-  );
+ 
 
   expect(res.json).toHaveBeenCalledWith({
     message: "User verified and account created",

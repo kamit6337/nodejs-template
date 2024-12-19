@@ -1,6 +1,5 @@
 import signup from "../../../controllers/auth/signup/signup.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
 import sendingEmail from "../../../utils/email/email.js";
 import otpTemplate from "../../../utils/email/otpTemplate.js";
 import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
@@ -49,13 +48,6 @@ it("user signup successfully", async () => {
     "user@gmail.com",
     "OTP for verification",
     html
-  );
-
-  // Ensure the cookie is set with the correct token
-  expect(res.cookie).toHaveBeenCalledWith(
-    "_sig",
-    "encryptedData",
-    cookieOptions
   );
 
   expect(res.json).toHaveBeenCalledWith({

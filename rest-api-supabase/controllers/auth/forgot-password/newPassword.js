@@ -1,32 +1,34 @@
-import getUserByEmail from "../../../database/User/getUserByEmail.js";
 import patchUserProfile from "../../../database/User/patchUserProfile.js";
 import HandleGlobalError from "../../../lib/HandleGlobalError.js";
 import catchAsyncError from "../../../lib/catchAsyncError.js";
-import bcrypt from "bcryptjs";
+import {
+  deleteKeyFromRedis,
+  getUserIdFromRedis,
+} from "../../../redis/Auth/forgotPassword.js";
 
 const newPassword = catchAsyncError(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { resetToken, password } = req.body;
 
-  if (!email || !password) {
+  if (!resetToken || !password) {
     return next(new HandleGlobalError("All fields is required", 404));
   }
 
-  const findUser = await getUserByEmail(email);
+  const userId = await getUserIdFromRedis(resetToken);
 
-  if (!findUser) {
+  if (!userId) {
     return next(
-      new HandleGlobalError("You are not our user. Please signup first")
+      new HandleGlobalError("Issue in Resetting Password. Try again later", 404)
     );
   }
 
-  const hashPassword = bcrypt.hashSync(password, 12);
-
   const obj = {
-    password: hashPassword,
+    password,
     updatedAt: Date.now(),
   };
 
   await patchUserProfile(findUser.id.toString(), obj);
+
+  await deleteKeyFromRedis(resetToken);
 
   res.json({
     message: "Password has been updated",

@@ -1,14 +1,23 @@
-import User from "../../models/UserModel.js";
+import { hashUserPassword } from "../../lib/bcrypt.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { setUserIntoRedis } from "../../redis/User/user.js";
 
 const postCreateUser = async (obj) => {
-  const createUser = await User.create({
-    ...obj,
-  });
+  const userObj = hashUserPassword(obj);
 
-  await setUserIntoRedis(createUser);
+  const { data, error } = await supabaseClient
+    .from("users")
+    .insert([userObj])
+    .select()
+    .single();
 
-  return createUser;
+  if (error) {
+    throw new Error(error);
+  }
+
+  await setUserIntoRedis(data);
+
+  return data;
 };
 
 export default postCreateUser;

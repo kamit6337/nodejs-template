@@ -2,6 +2,7 @@ import HandleGlobalError from "../../../lib/HandleGlobalError.js";
 import catchAsyncError from "../../../lib/catchAsyncError.js";
 import { encrypt } from "../../../lib/encryptAndDecrypt.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
+import { verifyUserPassword } from "../../../lib/bcrypt.js";
 
 const login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
@@ -26,7 +27,7 @@ const login = catchAsyncError(async (req, res, next) => {
   }
 
   //   MARK: IF USER PASSWORD DOES NOT MATCH WITH HASH PASSWORD, THROW ERROR
-  const isPasswordValid = findUser.checkPassword(password); // Boolean
+  const isPasswordValid = verifyUserPassword(findUser.password, password);
 
   if (!isPasswordValid) {
     return next(new HandleGlobalError("Email or Password is incorrect", 404));

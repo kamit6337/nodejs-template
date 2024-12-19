@@ -9,16 +9,35 @@ import newPassword from "../controllers/auth/forgot-password/newPassword.js";
 import OAuthLogin from "../controllers/auth/OAuth-login/OAuthLogin.js";
 import verifySignup from "../controllers/auth/signup/verifySignup.js";
 import resendOtp from "../controllers/auth/signup/resendOtp.js";
-import verifyUserOTP from "../controllers/auth/otp/verifyUserOTP.js";
+import rateLimit from "express-rate-limit";
+import slowDown from "express-slow-down";
 
 const router = express.Router();
+
+// Create a rate limiter for the forgot password endpoint
+const forgotPasswordRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per `windowMs` (15 minutes)
+  message: "Too many requests, please try again later.",
+  standardHeaders: true, // Return rate limit info in the `X-RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` legacy headers
+});
+
+// Optional: Add a slow-down middleware for added protection
+const speedLimiter = slowDown({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  delayAfter: 2, // Delay the response after 2 requests
+  delayMs: 500, // Add 500ms delay per request after 2 requests
+});
+
+// Middleware to handle rate limiting and slow down on the forgot password endpoint
+app.use("/forgotPassword", forgotPasswordRateLimiter, speedLimiter);
 
 // NOTE: CONTINUOUS CHECK LOGIN
 router.get("/login/check", loginCheck);
 
 // NOTE: FORGOT PASSWORD
-router.post("/forgot", forgotPassword);
-router.post("/verifyOTP", verifyUserOTP);
+router.post("/forgotPassword", forgotPassword);
 router.post("/newPassword", newPassword);
 
 // NOTE: CUSTOM SIGNUP AND LOGIN

@@ -8,7 +8,6 @@ const loginCheck = catchAsyncError(async (req, res, next) => {
     message: "User is present",
     _id: findUser._id,
     name: findUser.name,
-    username: findUser.username,
     photo: findUser.photo,
     email: findUser.email,
     role: findUser.role,

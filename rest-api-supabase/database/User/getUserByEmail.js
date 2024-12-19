@@ -1,4 +1,4 @@
-import User from "../../models/UserModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import {
   getUserByEmailRedis,
   setUserIntoRedis,
@@ -8,15 +8,20 @@ const getUserByEmail = async (email) => {
   const get = await getUserByEmailRedis(email);
 
   if (get) {
-    // Convert the plain object from Redis into a Mongoose document
-    return User.hydrate(get);
+    return get;
   }
 
-  const findUser = await User.findOne({ email });
+  const { data, error } = await supabaseClient.from("users").select("*");
 
-  await setUserIntoRedis(findUser);
+  if (error) {
+    throw new Error(`GET USER BY EMAIL error  : ${error}`);
+  }
 
-  return findUser;
+  const user = data[0];
+
+  await setUserIntoRedis(user);
+
+  return user;
 };
 
 export default getUserByEmail;

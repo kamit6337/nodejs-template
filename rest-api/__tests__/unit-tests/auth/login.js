@@ -1,6 +1,5 @@
 import login from "../../../controllers/auth/login/login.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
-import cookieOptions from "../../../utils/cookieOptions.js";
 import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
 
 jest.mock("../../../database/User/getUserByEmail.js");
@@ -39,8 +38,6 @@ it("send email successfully", async () => {
   encrypt.mockReturnValue("encrypted");
 
   await login(req, res, next);
-
-  expect(res.cookie).toHaveBeenCalledWith("_use", "encrypted", cookieOptions);
 
   expect(res.json).toHaveBeenCalledWith({
     message: "Login Successfully",

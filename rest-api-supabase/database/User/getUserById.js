@@ -1,20 +1,27 @@
-import User from "../../models/UserModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { getUserByIdRedis, setUserIntoRedis } from "../../redis/User/user.js";
 
 const getUserById = async (id) => {
   const get = await getUserByIdRedis(id);
 
   if (get) {
-    return User.hydrate(get);
+    return get;
   }
 
-  const findUser = await User.findOne({
-    _id: id,
-  });
+  const { data, error } = await supabaseClient
+    .from("users")
+    .select("*")
+    .eq("_id", id);
 
-  await setUserIntoRedis(findUser);
+  if (error) {
+    throw new Error(error);
+  }
 
-  return findUser;
+  const user = data[0];
+
+  await setUserIntoRedis(user);
+
+  return user;
 };
 
 export default getUserById;

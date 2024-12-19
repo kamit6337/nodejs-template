@@ -1,6 +1,6 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import HandleGlobalError from "../../lib/HandleGlobalError.js";
-import s3Client from "../../lib/aws/awsS3.js";
+import HandleGlobalError from "../HandleGlobalError.js";
+import s3Client from "./awsS3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { environment } from "../../utils/environment.js";
 
