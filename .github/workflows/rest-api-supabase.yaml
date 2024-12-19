@@ -1,4 +1,4 @@
-name: create-rest-api-socketio-image
+name: REST-APIs Supabase Template Image
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build -t kamit6337/template-rest-api-socketio-server ./rest-api-socketio
+        run: docker build -t kamit6337/template-rest-api-supabase-server ./rest-api-supabase
 
       - name: Push the Docker image to Docker Hub
-        run: docker push kamit6337/template-rest-api-socketio-server
+        run: docker push kamit6337/template-rest-api-supabase-server

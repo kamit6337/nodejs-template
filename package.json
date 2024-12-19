@@ -10,6 +10,8 @@
     "rest-api",
     "graphql",
     "rest-api-socketio",
+    "rest-api-supabase",
+    "rest-api-socketio-supabase",
     "index.js",
     "gitignore.js",
     "package.json",

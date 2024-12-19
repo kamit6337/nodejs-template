@@ -1,4 +1,4 @@
-name: create-graphql-image
+name: Push Docker Image to Docker Hub
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    needs: test-and-build # Ensures this job runs only after tests pass
 
     steps:
       - name: Checkout repository
@@ -23,7 +24,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build -t kamit6337/template-graphql-server ./graphql
+        run: docker build -t kamit6337/nodejs-template:latest ./server
 
       - name: Push the Docker image to Docker Hub
-        run: docker push kamit6337/template-graphql-server
+        run: docker push kamit6337/nodejs-template:latest
