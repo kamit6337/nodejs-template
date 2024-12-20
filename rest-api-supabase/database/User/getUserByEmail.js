@@ -11,7 +11,10 @@ const getUserByEmail = async (email) => {
     return get;
   }
 
-  const { data, error } = await supabaseClient.from("users").select("*");
+  const { data, error } = await supabaseClient
+    .from("users")
+    .select("*")
+    .eq("email", email);
 
   if (error) {
     throw new Error(`GET USER BY EMAIL error  : ${error}`);

@@ -5,7 +5,7 @@ import redisClient from "../redis/redisClient.js";
 const expressSessionOptions = {
   cookie: {
     httpOnly: true,
-    maxAge: environment.EXPIRES_IN,
+    maxAge: 1 * 60 * 60 * 1000, // 1 hour
     secure: environment.NODE_ENV === "production", // Use secure cookies in production
   },
   secret: environment.JWT_SECRET_KEY,
