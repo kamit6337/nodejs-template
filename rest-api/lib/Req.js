@@ -33,10 +33,10 @@ const Req = async (req) => {
   }
 
   // MARK: CHECK UPDATED-AT WHEN PASSWORD UPDATE, SO LOGIN AGAIN IF PASSWORD RESET
-  const updatedAtInMilli = new Date(findUser.updatedAt).getTime();
+  const updatedAtInMilli = new Date(findUser.passwordLastUpdated).getTime();
 
   if (decoded.iat + 5000 <= updatedAtInMilli) {
-    //5seconds advantage
+    //5 seconds advantage
     throw new Error("Please login again...");
   }
 

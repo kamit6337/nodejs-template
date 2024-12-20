@@ -2,9 +2,10 @@ import catchAsyncError from "../../../lib/catchAsyncError.js";
 import HandleGlobalError from "../../../lib/HandleGlobalError.js";
 import sendingEmail from "../../../utils/email/email.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
-import generateOTP from "../../../utils/javaScript/generateOTP.js";
-import otpTemplate from "../../../utils/email/otpTemplate.js";
-import { setUserOTPIntoRedis } from "../../../redis/Auth/signUp.js";
+import generateResetToken from "../../../utils/generateResetToken.js";
+import resetPasswordLinkTemplate from "../../../utils/email/resetPasswordLinkTemplate.js";
+import { environment } from "../../../utils/environment.js";
+import { setUserIdIntoRedis } from "../../../redis/Auth/forgotPassword.js";
 
 const forgotPassword = catchAsyncError(async (req, res, next) => {
   const { email } = req.body;
@@ -24,14 +25,17 @@ const forgotPassword = catchAsyncError(async (req, res, next) => {
     );
   }
 
-  const otp = generateOTP();
-  const html = otpTemplate(otp);
+  const secretToken = generateResetToken();
+
+  const url = `${environment.CLIENT_URL}/newPassword?resetToken=${secretToken}`;
+
+  const html = resetPasswordLinkTemplate(url);
   await sendingEmail(email, "OTP for verification", html);
 
-  await setUserOTPIntoRedis(email, otp);
+  await setUserIdIntoRedis(secretToken, findUser._id);
 
   res.json({
-    message: "OTP is send to email",
+    message: "Reset Password link send to your email",
   });
 });
 

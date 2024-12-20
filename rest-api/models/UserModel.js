@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validation from "validator";
-import bcrypt from "bcryptjs";
+import { hashUserPassword } from "../lib/bcrypt.js";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  passwordLastUpdated: {
+    type: Date,
+    default: Date.now(),
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -56,20 +60,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index({ email: 1 });
 
-userSchema.methods.checkPassword = function (given_password) {
-  //   WORK: CHECK IF USER PASSWORD DOES NOT MATCH WITH HASH PASSWORD
-  const checkPassword = bcrypt.compareSync(
-    String(given_password),
-    this.password
-  );
-
-  return checkPassword;
-};
-
-userSchema.pre("save", function (next) {
-  // Check if there's a password to hash
-  if (this.password) {
-    this.password = bcrypt.hashSync(this.password, 12);
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    await hashUserPassword(this); // Hash only if password is modified.
   }
 
   next();

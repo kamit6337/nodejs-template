@@ -23,7 +23,7 @@ const newPassword = catchAsyncError(async (req, res, next) => {
 
   const obj = {
     password,
-    updatedAt: Date.now(),
+    passwordLastUpdated: Date.now(),
   };
 
   await patchUserProfile(findUser.id.toString(), obj);

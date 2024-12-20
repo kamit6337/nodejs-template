@@ -45,6 +45,10 @@ const userSchema = {
     enum: ["user", "admin"],
     default: "user",
   },
+  passwordLastUpdated: {
+    type: Date,
+    default: Date.now(),
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
