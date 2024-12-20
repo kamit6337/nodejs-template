@@ -12,7 +12,7 @@ function createGitignore(destFolder) {
   const gitignoreContent = GITIGNORE;
 
   fs.writeFileSync(gitignorePath, gitignoreContent.trim());
-  console.log(".gitignore created successfully in server folder.");
+  console.log(".gitignore created successfully");
 }
 
 function copyTemplate(destFolder, templateName) {
@@ -122,7 +122,7 @@ async function main() {
   // Copy template files to root project directory
   copyTemplate(projectPath, templateName);
 
-  createGitignore(serverPath);
+  createGitignore(projectPath);
   installDependencies(projectPath);
 
   console.log(`${apiChoice} Node.js server created successfully!`);
