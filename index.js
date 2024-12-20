@@ -21,7 +21,7 @@ function copyTemplate(destFolder, templateName) {
   try {
     // Copy template files into the destination folder's root
     fs.cpSync(templatePath, destFolder, { recursive: true });
-    console.log(`Template files for ${apiChoice} copied successfully.`);
+    console.log(`Template files copied successfully.`);
   } catch (err) {
     console.error("Error copying template files:", err.message);
     process.exit(1);
