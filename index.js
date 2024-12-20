@@ -125,7 +125,7 @@ async function main() {
   createGitignore(projectPath);
   installDependencies(projectPath);
 
-  console.log(`${apiChoice} Node.js server created successfully!`);
+  console.log(`Node.js server created successfully!`);
 }
 
 main();
