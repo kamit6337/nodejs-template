@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const environment = {
+  PROJECT_NAME: process.env.PROJECT_NAME,
+
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   CLIENT_URL: process.env.CLIENT_URL,
@@ -25,4 +27,8 @@ export const environment = {
   AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
 
   REDIS_URL: process.env.REDIS_URL,
+
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 };

@@ -1,9 +1,10 @@
 import getUserByEmail from "../../database/User/getUserByEmail.js";
 import catchGraphQLError from "../../lib/catchGraphQLError.js";
-import { setUserOTPIntoRedis } from "../../redis/Auth/signUp.js";
+import { setUserIdIntoRedis } from "../../redis/Auth/forgotPassword.js";
 import sendingEmail from "../../utils/email/email.js";
-import otpTemplate from "../../utils/email/otpTemplate.js";
-import generateOTP from "../../utils/javaScript/generateOTP.js";
+import resetPasswordLinkTemplate from "../../utils/email/resetPasswordLinkTemplate.js";
+import { environment } from "../../utils/environment.js";
+import generateResetToken from "../../utils/javaScript/generateResetToken.js";
 
 const forgotPassword = catchGraphQLError(async (parent, args, contextValue) => {
   const { email } = args;
@@ -18,15 +19,17 @@ const forgotPassword = catchGraphQLError(async (parent, args, contextValue) => {
     throw new Error("You are not our customer. Please signup first");
   }
 
-  const otp = generateOTP();
+  const secretToken = generateResetToken();
 
-  const html = otpTemplate(otp);
+  const url = `${environment.CLIENT_URL}/newPassword?resetToken=${secretToken}`;
 
-  await sendingEmail(email, "OTP for verification", html);
+  const html = resetPasswordLinkTemplate(url);
 
-  await setUserOTPIntoRedis(email, otp);
+  await sendingEmail(email, "Reset Password Link", html);
 
-  return "OTP send to Email for verification";
+  await setUserIdIntoRedis(secretToken, findUser._id);
+
+  return "Reset Password link send to your email";
 });
 
 export default forgotPassword;

@@ -1,62 +1,65 @@
 import mongoose from "mongoose";
 import validation from "validator";
-import bcrypt from "bcryptjs";
+import { hashUserPassword } from "../lib/bcrypt.js";
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator: function (value) {
-        return validation.isEmail(value);
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: function (value) {
+          return validation.isEmail(value);
+        },
+        message: (props) => `${props.value} is not a valid email`,
       },
-      message: (props) => `${props.value} is not a valid email`,
+    },
+    password: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    photo: {
+      type: String,
+      default: [true, "Please provide pic"],
+      trim: true,
+    },
+    OAuthId: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    OAuthProvider: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    passwordLastUpdated: {
+      type: Date,
+      default: Date.now(),
     },
   },
-  password: {
-    type: String,
-    default: null,
-  },
-  photo: {
-    type: String,
-    default: null,
-  },
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user",
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.index({ email: 1 });
 
-userSchema.methods.checkPassword = function (given_password) {
-  //   WORK: CHECK IF USER PASSWORD DOES NOT MATCH WITH HASH PASSWORD
-  const checkPassword = bcrypt.compareSync(
-    String(given_password),
-    this.password
-  );
-
-  return checkPassword;
-};
-
-userSchema.pre("save", function (next) {
-  // Check if there's a password to hash
-  if (this.password) {
-    this.password = bcrypt.hashSync(this.password, 12);
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    await hashUserPassword(this); // Hash only if password is modified.
   }
 
   next();

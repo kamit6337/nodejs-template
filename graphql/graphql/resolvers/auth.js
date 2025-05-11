@@ -4,7 +4,6 @@ import makeLoginUser from "../../services/auth/makeLoginUser.js";
 import makeUserSignUp from "../../services/auth/makeUserSignUp.js";
 import makeUserSignUpFinal from "../../services/auth/makeUserSignUpFinal.js";
 import newPassword from "../../services/auth/newPassword.js";
-import otpVerification from "../../services/auth/otpVerification.js";
 import resendOtpToEmail from "../../services/auth/resendOtpToEmail.js";
 
 const authResolvers = {
@@ -15,10 +14,9 @@ const authResolvers = {
   Mutation: {
     loginUser: makeLoginUser,
     signUpUserInitial: makeUserSignUp,
-    signUpUserFinal: makeUserSignUpFinal,
     resendOtp: resendOtpToEmail,
+    signUpUserFinal: makeUserSignUpFinal,
     forgotPassword: forgotPassword,
-    otpVerification: otpVerification,
     newPassword: newPassword,
   },
 };
