@@ -8,6 +8,8 @@ const makeUserSignUpFinal = catchGraphQLError(
   async (parent, args, contextValue) => {
     const { otp, email } = args;
 
+    if (!otp || !email) throw new Error("Otp or Email is not provided");
+
     await verifyOtp(email, otp);
 
     const user = await getUserSignUpDataRedis(email);
