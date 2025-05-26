@@ -1,12 +1,11 @@
 import { environment } from "../../../utils/environment.js";
-import catchAsyncError from "../../../lib/catchAsyncError.js";
 import { encrypt } from "../../../lib/encryptAndDecrypt.js";
 import getUserByEmail from "../../../database/User/getUserByEmail.js";
 import postCreateUser from "../../../database/User/postCreateUser.js";
 import uploadImageByURL from "../../../lib/cloudinary/uploadImageByURL.js";
 
 // NOTE: LOGIN SUCCESS
-const OAuthLogin = catchAsyncError(async (req, res, next) => {
+const OAuthLogin = async (req, res, next) => {
   try {
     if (!req.user) {
       res.redirect(`${environment.CLIENT_URL}/oauth`);
@@ -63,6 +62,6 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
     console.log("Error in OAuth Login", error);
     res.redirect(`${environment.CLIENT_URL}/oauth`);
   }
-});
+};
 
 export default OAuthLogin;

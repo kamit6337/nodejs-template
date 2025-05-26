@@ -1,13 +1,9 @@
-import HandleGlobalError from "../lib/HandleGlobalError.js";
-
 const unIdentifiedUrlError = (req, res, next) => {
-  return next(
-    new HandleGlobalError(
-      `Somethings went wrong. Please check your Url - ${req.originalUrl}`,
-      500,
-      "Fail"
-    )
-  );
+  return next({
+    message: `Somethings went wrong. Please check your Url - ${req.originalUrl}`,
+    status: "Fail",
+    statusCode: 500,
+  });
 };
 
 export default unIdentifiedUrlError;
