@@ -1,5 +1,6 @@
-import MongoStore from "connect-mongo";
+import redisClient from "../redis/redisClient.js";
 import { environment } from "../utils/environment.js";
+import { RedisStore } from "connect-redis";
 
 const expressSessionOptions = {
   cookie: { httpOnly: true, maxAge: environment.EXPIRES_IN },
@@ -7,10 +8,7 @@ const expressSessionOptions = {
   resave: false,
   saveUninitialized: false,
   name: "OAuth-session",
-  store: MongoStore.create({
-    mongoUrl: environment.MONGO_DB_URI,
-    ttl: 14 * 24 * 60 * 60, // 14 days expiration
-  }),
+  store: new RedisStore({ client: redisClient, prefix: "myapp:" }),
 };
 
 export default expressSessionOptions;
