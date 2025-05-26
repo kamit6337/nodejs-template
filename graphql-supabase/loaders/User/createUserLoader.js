@@ -1,13 +1,18 @@
 import DataLoader from "dataloader";
-import User from "../../models/UserModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 
 const createUserLoader = () =>
   new DataLoader(async (ids) => {
     const userIds = [...ids];
 
-    const users = await User.find({
-      _id: { $in: userIds },
-    }).lean();
+    const { data: users, error } = await supabaseClient
+      .from("users")
+      .select("*")
+      .in("_id", ids);
+
+    if (error) {
+      throw new Error(error);
+    }
 
     const map = new Map(users.map((user) => [user._id?.toString(), user]));
 
