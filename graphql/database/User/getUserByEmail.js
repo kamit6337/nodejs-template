@@ -8,8 +8,7 @@ const getUserByEmail = async (email) => {
   const get = await getUserByEmailRedis(email);
 
   if (get) {
-    // Convert the plain object from Redis into a Mongoose document
-    return User.hydrate(get);
+    return get;
   }
 
   const findUser = await User.findOne({ email });

@@ -82,6 +82,19 @@ async function main() {
 
   if (answer1?.toLowerCase().trim() === "graphql") {
     templateName = "graphql";
+
+    const answer2 = await askQuestion(
+      "Want to include supabase(SQL) ? (yes or no, default is MongoDB (NO-SQL)): "
+    );
+
+    if (
+      answer2?.toLowerCase().trim() === "y" ||
+      answer2?.toLowerCase().trim() === "yes"
+    ) {
+      templateName = "graphql-supabase";
+    } else {
+      templateName = "graphql";
+    }
   } else {
     const answer2 = await askQuestion(
       "Want to include socket.io? (yes or no, default is no): "

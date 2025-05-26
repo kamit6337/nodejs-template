@@ -9,6 +9,7 @@
   "files": [
     "rest-api",
     "graphql",
+    "graphql-supabase",
     "rest-api-socketio",
     "rest-api-supabase",
     "rest-api-socketio-supabase",
@@ -19,7 +20,8 @@
   ],
   "keywords": [
     "nodejs",
-    "server"
+    "server",
+    "graphql"
   ],
   "author": "Amit Kumar",
   "license": "MIT"
